@@ -24,15 +24,33 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Cache gtest
+      uses: actions/cache@v4
+      id: cache-gtest
+      with:
+        path: "~/gtest"
+        key: gtest_latest
+
     - name: Install gtest
+      env:
+        CACHE_HIT: ${{steps.cache-gtest.outputs.cache-hit}}
       run: |
-        sudo apt-get install libgtest-dev
-        cd /usr/src/gtest
-        sudo cmake CMakeLists.txt
-        sudo make
-        sudo cp lib/*.a /usr/lib
-        sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a
-        sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
+        if [[ "$CACHE_HIT" == 'true' ]]; then
+          cd ~/gtest
+          sudo cp lib/*.a /usr/lib
+          sudo cp -R ~/gtest/* /usr
+       else
+          git clone git@github.com:google/googletest.git
+          cd googletest
+          mkdir build
+          cd build
+          cmake ..
+          [ ! -d ~/gtest ] && mkdir ~/gtest
+          cmake --install . --prefix ~/gtest
+          cd ~/gtest
+          sudo cp lib/*.a /usr/lib
+          sudo cp -R ~/gtest/* /usr
+        fi
 
     - name: Install DebugTrace
       run: |
