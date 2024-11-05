@@ -34,9 +34,8 @@
 #include <dkyb/traceutil.h>
 #include <typeinfo>
 
-namespace util
-{
-namespace graph
+
+namespace util::graph
 {
 #ifdef DO_GRAPH_DEBUG_TRACE_
 
@@ -116,8 +115,8 @@ namespace graph
     #define PRINT_TYPES_AND_BOOLS(graphP)
     #define SHOW_SUB_GRAPHS(graph)
 #endif
-} // namespace graph
-} // namespace util
+} // namespace util::graph
+
 
 #ifdef TRACING_ADDED_
     #undef DO_TRACE_

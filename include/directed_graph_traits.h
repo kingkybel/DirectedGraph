@@ -1,7 +1,7 @@
 /*
- * Repository:  https://github.com/kingkybel/CPP-utilities
- * File Name:   include/graph_traits.h
- * Description: graph traits to use with directed graphs in graphutil.h
+ * Repository:  https://github.com/kingkybel/DirectedGraph
+ * File Name:   include/directed_graph_traits.h
+ * Description: graph traits to use with directed graphs in directed_graph.h
  *
  * Copyright (C) 2024 Dieter J Kybelksties <github@kybelksties.com>
  *
@@ -19,7 +19,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * @date: 2024-10-11
+ * @date: 2024-11-05
  * @author: Dieter J Kybelksties
  */
 
@@ -29,9 +29,7 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <dkyb/traits.h>
 
-namespace util
-{
-namespace graph
+namespace util::graph
 {
 
 /**
@@ -41,7 +39,7 @@ namespace graph
  *       nextID<Class1>() has a different sequence from nextID<Class2>().
  * @return the next ID
  */
-template<typename T_>
+template <typename T_>
 inline size_t nextID()
 {
     static size_t id_counter = 0UL;
@@ -377,7 +375,6 @@ struct set_or_default_bool_option
 
 // clang-format on
 
-} // namespace graph
-} // namespace util
+} // namespace util::graph
 
 #endif // UTIL_GRAPH_DIRECTED_GRAPH_TRAITS_H

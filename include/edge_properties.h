@@ -25,11 +25,10 @@
 
 #ifndef NS_UTIL_GRAPH_EDGE_PROPERTIES_H
 #define NS_UTIL_GRAPH_EDGE_PROPERTIES_H
+
 #include "directed_graph_traits.h"
 
-namespace util
-{
-namespace graph
+namespace util::graph
 {
 /**
  * Edge properties struct with conditional members
@@ -83,8 +82,8 @@ struct EdgeProperties
     typename std::conditional<HasIndex, size_t, std::monostate>::type index{};
 };
 
-} // namespace graph
-} // namespace util
+} // namespace util::graph
+
 
 namespace std
 {

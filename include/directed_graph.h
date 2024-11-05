@@ -62,9 +62,7 @@ template <
     typename PreferComparableContainer>
 void testCorrectTypes();
 
-namespace util
-{
-namespace graph
+namespace util::graph
 {
 
 /**
@@ -1566,7 +1564,6 @@ struct connected_graph : public directed_graph_base<VertexDataType, EdgeDataType
     static_assert(!has_disallowed_option_v<disconnected>, "connected graph cannot be disconnected");
 };
 
-}; // namespace graph
-}; // namespace util
+}; // namespace util::graph
 
 #endif // NS_UTIL_GRAPH_DIRECTED_GRAPH_H_INCLUDED
