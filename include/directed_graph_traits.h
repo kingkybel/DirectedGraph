@@ -236,7 +236,7 @@ struct appropriate_storage_selector
  */
 template <typename ElementType, typename FallbackSelector, bool AllowMultiple, bool PreferComparable>
 using appropriate_storage_selector_t =
-    appropriate_storage_selector<ElementType, FallbackSelector, AllowMultiple, PreferComparable>::type;
+    typename appropriate_storage_selector<ElementType, FallbackSelector, AllowMultiple, PreferComparable>::type;
 
 // clang-format off
 
@@ -336,7 +336,7 @@ struct has_option<T, First, Rest...>
     : std::conditional_t<std::is_same_v<T, First>, std::true_type, has_option<T, Rest...>>{};
 
 template <typename T, typename... Rest>
-using has_option_t = has_option<T, Rest...>::type;
+using has_option_t = typename has_option<T, Rest...>::type;
 
 template <typename T, typename... Rest>
 bool constexpr has_option_v = has_option<T, Rest...>::value;
@@ -352,7 +352,7 @@ struct has_disallowed_option<T, First, Rest...>
     : std::conditional_t<std::is_same_v<T, First>, std::true_type, has_option<T, Rest...>>{};
 
 template <typename T, typename... Rest>
-using has_disallowed_option_t = has_disallowed_option<T, Rest...>::type;
+using has_disallowed_option_t = typename has_disallowed_option<T, Rest...>::type;
 
 template <typename T, typename... Rest>
 bool constexpr has_disallowed_option_v = has_disallowed_option<T, Rest...>::value;

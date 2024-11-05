@@ -916,27 +916,9 @@ class directed_graph_base
         double average_degree{};
         double cyclomatic_complexity{};
         int    diameter{};
-
-        friend auto operator<=>(GraphComplexity const &lhs, GraphComplexity const &rhs)
-        {
-            return std::tie(
-                       lhs.density,
-                       lhs.average_degree,
-                       lhs.cyclomatic_complexity,
-                       lhs.diameter,
-                       lhs.numVertices,
-                       lhs.numEdges
-                   ) <=>
-                   std::tie(
-                       rhs.density,
-                       rhs.average_degree,
-                       rhs.cyclomatic_complexity,
-                       rhs.diameter,
-                       rhs.numVertices,
-                       rhs.numEdges
-                   );
-        }
+        auto operator<=>(GraphComplexity const &rhs) const = default;
     };
+
 
     GraphComplexity complexity(long long numConnectedComponents = -1)
     {
