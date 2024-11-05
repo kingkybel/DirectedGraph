@@ -53,38 +53,6 @@ jobs:
           sudo cp -R ~/gtest/* /usr
         fi
 
-    - name: Install DebugTrace
-      run: |
-        mkdir -p ${{github.workspace}}/DebugTrace/build
-        cd ${{github.workspace}}/DebugTrace/build
-        cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
-        cmake --build . --parallel $(nproc)
-        sudo cmake --install .
-
-    - name: Install TypeTraits
-      run: |
-        mkdir -p ${{github.workspace}}/TypeTraits/build
-        cd ${{github.workspace}}/TypeTraits/build
-        cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
-        cmake --build . --parallel $(nproc)
-        sudo cmake --install .
-
-    - name: Install ContainerConvert
-      run: |
-        mkdir -p ${{github.workspace}}/ContainerConvert/build
-        cd ${{github.workspace}}/ContainerConvert/build
-        cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
-        cmake --build . --parallel $(nproc)
-        sudo cmake --install .
-
-    - name: Install StringUtilities
-      run: |
-        mkdir -p ${{github.workspace}}/StringUtilities/build
-        cd ${{github.workspace}}/StringUtilities/build
-        cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
-        cmake --build . --parallel $(nproc)
-        sudo cmake --install .
-
     - name: Cache boost
       uses: actions/cache@v4
       id: cache-boost
