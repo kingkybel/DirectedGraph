@@ -56,6 +56,10 @@ sudo make install
 ## use cmake to install the header-only library
 
 ```bash
+# git clone --recurse-submodules -j $(nproc) https://github.com/kingkybel/DirectedGraph.git
+# or:
+git clone --recurse-submodules -j $(nproc) git@github.com:kingkybel/DirectedGraph.git
+cd DirectedGraph
 # change the next line to change the install prefix to your liking
 INSTALL_PREFIX=/usr
 mkdir ./build
