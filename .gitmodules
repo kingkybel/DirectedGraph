@@ -1,0 +1,12 @@
+[submodule "DebugTrace"]
+	path = DebugTrace
+	url = git@github.com:kingkybel/DebugTrace.git
+[submodule "TypeTraits"]
+	path = TypeTraits
+	url = git@github.com:kingkybel/TypeTraits.git
+[submodule "ContainerConvert"]
+	path = ContainerConvert
+	url = git@github.com:kingkybel/ContainerConvert.git
+[submodule "StringUtilities"]
+	path = StringUtilities
+	url = git@github.com:kingkybel/StringUtilities.git

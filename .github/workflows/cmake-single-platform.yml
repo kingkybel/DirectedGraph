@@ -1,0 +1,111 @@
+# This starter workflow is for a CMake project running on a single platform. There is a different starter workflow if you need cross-platform coverage.
+# See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-multi-platform.yml
+name: CMake on a single platform
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: RelWithDebInfo
+
+jobs:
+  build:
+    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
+    # You can convert this to a matrix build if you need cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install gtest
+      run: |
+        sudo apt-get install libgtest-dev
+        cd /usr/src/gtest
+        sudo cmake CMakeLists.txt
+        sudo make
+        sudo cp lib/*.a /usr/lib
+        sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a
+        sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
+
+    - name: Install DebugTrace
+      run: |
+        mkdir -p ${{github.workspace}}/DebugTrace/build
+        cd ${{github.workspace}}/DebugTrace/build
+        cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
+        cmake --build . --parallel $(nproc)
+        sudo cmake --install .
+
+    - name: Install TypeTraits
+      run: |
+        mkdir -p ${{github.workspace}}/TypeTraits/build
+        cd ${{github.workspace}}/TypeTraits/build
+        cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
+        cmake --build . --parallel $(nproc)
+        sudo cmake --install .
+
+    - name: Install ContainerConvert
+      run: |
+        mkdir -p ${{github.workspace}}/ContainerConvert/build
+        cd ${{github.workspace}}/ContainerConvert/build
+        cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
+        cmake --build . --parallel $(nproc)
+        sudo cmake --install .
+
+    - name: Install StringUtilities
+      run: |
+        mkdir -p ${{github.workspace}}/StringUtilities/build
+        cd ${{github.workspace}}/StringUtilities/build
+        cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
+        cmake --build . --parallel $(nproc)
+        sudo cmake --install .
+
+    - name: Cache boost
+      uses: actions/cache@v4
+      id: cache-boost
+      with:
+        path: "~/~/boost"
+        key: boost_1.86.0
+
+    - name: Install Boost
+      env:
+        CACHE_HIT: ${{steps.cache-boost.outputs.cache-hit}}
+      run: |
+        if [[ "$CACHE_HIT" == 'true' ]]; then
+          sudo cp --force --recursive ~/boost/* /usr
+        else
+          BOOST_MAJOR=1
+          BOOST_MID=86
+          BOOST_MINOR=0
+          BOOST_VER=${BOOST_MAJOR}_${BOOST_MID}_${BOOST_MINOR}
+          BOOST_VER_DOT=${BOOST_MAJOR}.${BOOST_MID}.${BOOST_MINOR}
+          wget -O boost_${BOOST_VER}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VER_DOT}/boost_${BOOST_VER}.tar.gz/download
+          tar -xvf boost_${BOOST_VER}.tar.gz
+          cd boost_${BOOST_VER}
+          ./bootstrap.sh --prefix=/home/runner/boost
+          ./b2
+          ./b2 install
+          sudo cp --force --recursive ~/boost/* /usr
+        fi
+
+    - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+    - name: Build
+      # Build your program with the given configuration
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build/${{env.BUILD_TYPE}}/bin
+      # Execute tests defined by the CMake configuration.
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: ${{github.workspace}}/build/${{env.BUILD_TYPE}}/bin/run_tests
+
