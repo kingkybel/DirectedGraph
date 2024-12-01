@@ -81,6 +81,39 @@ jobs:
           sudo cp --force --recursive ~/boost/* /usr
         fi
 
+
+    - name: Install DebugTrace
+      run: |
+        mkdir -p ${{github.workspace}}/DebugTrace/build
+        cd ${{github.workspace}}/DebugTrace/build
+        cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
+        cmake --build . --parallel $(nproc)
+        sudo cmake --install .
+
+    - name: Install TypeTraits
+      run: |
+        mkdir -p ${{github.workspace}}/TypeTraits/build
+        cd ${{github.workspace}}/TypeTraits/build
+        cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
+        cmake --build . --parallel $(nproc)
+        sudo cmake --install .
+
+    - name: Install ContainerConvert
+      run: |
+        mkdir -p ${{github.workspace}}/ContainerConvert/build
+        cd ${{github.workspace}}/ContainerConvert/build
+        cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
+        cmake --build . --parallel $(nproc)
+        sudo cmake --install .
+
+    - name: Install StringUtilities
+      run: |
+        mkdir -p ${{github.workspace}}/StringUtilities/build
+        cd ${{github.workspace}}/ContainerConvert/build
+        cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
+        cmake --build . --parallel $(nproc)
+        sudo cmake --install .
+
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
