@@ -109,7 +109,7 @@ jobs:
     - name: Install StringUtilities
       run: |
         mkdir -p ${{github.workspace}}/StringUtilities/build
-        cd ${{github.workspace}}/ContainerConvert/build
+        cd ${{github.workspace}}/StringUtilities/build
         cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
         cmake --build . --parallel $(nproc)
         sudo cmake --install .
