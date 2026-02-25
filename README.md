@@ -8,6 +8,24 @@ different morphologies of directed graphs and enforce them via templates and cod
 Instantiations of directed graphs can be customised by optional type-tags that govern shape and behaviour of the
 resulting graph type.
 
+# Purpose
+
+This repository provides strongly-typed directed-graph abstractions on top of Boost Graph Library (BGL).
+It is intended to:
+
+- make graph-shape constraints explicit at compile time (for example connected or acyclic variants),
+- keep graph usage ergonomic for application code while still using BGL internally,
+- provide tests that validate both behavior and template-trait selection.
+
+# Recent Build Changes
+
+The project was updated to keep builds stable with newer toolchains (Boost 1.90 and `g++-14`):
+
+- `run_tests` now links against the `DirectedGraphs` interface target so C++23 requirements are propagated to tests.
+  This ensures modern language features used in headers (such as `<=>`) are compiled with the correct standard.
+- `-Wno-error=maybe-uninitialized` was added to extra compile flags to avoid failing on a GCC 14 false-positive warning
+  emitted from Boost Graph internals under optimization (`-O2`) while retaining `-Werror` for other warnings.
+
 # Installation
 
 The installation and build is tested on *ubuntu24.04 LTS*
@@ -21,12 +39,12 @@ BOOST:
 mkdir ~/Repos ; cd ~/Repos
 ```
 
-Download, build and install boost, minimum version 1.86.0
+Download, build and install boost, minimum version 1.90.0
 
 ```bash
 # amend next three lines if you want a newer version of boost
 BOOST_MAJOR=1
-BOOST_MID=86
+BOOST_MID=90
 BOOST_MINOR=0
 BOOST_VER=${BOOST_MAJOR}_${BOOST_MID}_${BOOST_MINOR}
 BOOST_VER_DOT=${BOOST_MAJOR}.${BOOST_MID}.${BOOST_MINOR}

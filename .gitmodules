@@ -10,3 +10,6 @@
 [submodule "StringUtilities"]
 	path = StringUtilities
 	url = git@github.com:kingkybel/StringUtilities.git
+[submodule "cmake-common"]
+	path = cmake-common
+	url = git@github.com:kingkybel/CMakeCommon.git

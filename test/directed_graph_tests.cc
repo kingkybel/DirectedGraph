@@ -568,3 +568,55 @@ TEST_F(DirectedGraphTest, connected_graph_disallow_split_tests)
     TRACE1(connectedGraph)
     SHOW_SUB_GRAPHS(connectedGraph)
 }
+
+TEST_F(DirectedGraphTest, complexity_metrics_test)
+{
+    NotHashableOrComparable A{"A"};
+    NotHashableOrComparable B{"B"};
+    NotHashableOrComparable C{"C"};
+    NotHashableOrComparable E01{"E01"};
+    NotHashableOrComparable E02{"E02"};
+
+    directed_graph_base<NotHashableOrComparable, NotHashableOrComparable> graph{};
+    ASSERT_TRUE(graph.addEdge(A, B, E01));
+    ASSERT_TRUE(graph.addEdge(B, C, E02));
+
+    auto complexity = graph.complexity();
+    ASSERT_EQ(complexity.numVertices, 3UL);
+    ASSERT_EQ(complexity.numEdges, 2UL);
+    ASSERT_NEAR(complexity.density, 2.0 / 6.0, 1e-9);
+    ASSERT_NEAR(complexity.average_degree, 4.0 / 3.0, 1e-9);
+    ASSERT_NEAR(complexity.cyclomatic_complexity, 0.0, 1e-9);
+    ASSERT_EQ(complexity.diameter, 2);
+
+    auto explicitComponentsComplexity = graph.complexity(2);
+    ASSERT_NEAR(explicitComponentsComplexity.cyclomatic_complexity, 1.0, 1e-9);
+}
+
+TEST_F(DirectedGraphTest, disconnected_subgraphs_are_sorted_by_complexity_test)
+{
+    NotHashableOrComparable A{"A"};
+    NotHashableOrComparable B{"B"};
+    NotHashableOrComparable C{"C"};
+    NotHashableOrComparable D{"D"};
+    NotHashableOrComparable E{"E"};
+    NotHashableOrComparable E01{"E01"};
+    NotHashableOrComparable E02{"E02"};
+    NotHashableOrComparable E03{"E03"};
+
+    directed_graph_base<NotHashableOrComparable, NotHashableOrComparable> graph{};
+    ASSERT_TRUE(graph.addEdge(A, B, E01));
+    ASSERT_TRUE(graph.addEdge(B, C, E02));
+    ASSERT_TRUE(graph.addVertices(D, E));
+    ASSERT_TRUE(graph.addEdge(D, E, E03));
+
+    auto subGraphs = graph.getDisconnectedSubGraphs();
+    ASSERT_EQ(subGraphs.size(), 2UL);
+
+    auto it = subGraphs.begin();
+    ASSERT_EQ(it->first.numVertices, 3UL);
+    ASSERT_EQ(it->first.numEdges, 2UL);
+    ++it;
+    ASSERT_EQ(it->first.numVertices, 2UL);
+    ASSERT_EQ(it->first.numEdges, 1UL);
+}
