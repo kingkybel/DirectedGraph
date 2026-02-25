@@ -58,7 +58,7 @@ jobs:
       id: cache-boost
       with:
         path: "~/boost"
-        key: boost_1.86.0
+        key: boost_1.90.0
 
     - name: Install Boost
       env:
@@ -68,7 +68,7 @@ jobs:
           sudo cp --force --recursive ~/boost/* /usr
         else
           BOOST_MAJOR=1
-          BOOST_MID=86
+          BOOST_MID=90
           BOOST_MINOR=0
           BOOST_VER=${BOOST_MAJOR}_${BOOST_MID}_${BOOST_MINOR}
           BOOST_VER_DOT=${BOOST_MAJOR}.${BOOST_MID}.${BOOST_MINOR}
