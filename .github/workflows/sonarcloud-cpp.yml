@@ -27,6 +27,65 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential cmake ninja-build curl unzip
 
+      - name: Cache boost
+        uses: actions/cache@v4
+        id: cache-boost
+        with:
+          path: "$HOME/boost"
+          key: boost_1.90.0
+
+      - name: Install Boost
+        env:
+          CACHE_HIT: ${{steps.cache-boost.outputs.cache-hit}}
+        run: |
+          if [[ "$CACHE_HIT" == 'true' ]]; then
+            sudo cp --force --recursive $HOME/boost/* /usr
+          else
+            BOOST_MAJOR=1
+            BOOST_MID=90
+            BOOST_MINOR=0
+            BOOST_VER=${BOOST_MAJOR}_${BOOST_MID}_${BOOST_MINOR}
+            BOOST_VER_DOT=${BOOST_MAJOR}.${BOOST_MID}.${BOOST_MINOR}
+            wget --quiet -O boost_${BOOST_VER}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VER_DOT}/boost_${BOOST_VER}.tar.gz/download
+            tar -xf boost_${BOOST_VER}.tar.gz
+            cd boost_${BOOST_VER}
+            ./bootstrap.sh --prefix=$HOME/boost
+            ./b2 install -j $(nproc) --quiet || { echo "Boost build failed"; exit 1; }
+            sudo cp --force --recursive $HOME/boost/* /usr
+          fi
+
+      - name: Install DebugTrace
+        run: |
+          mkdir -p ${{github.workspace}}/DebugTrace/build
+          cd ${{github.workspace}}/DebugTrace/build
+          cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
+          cmake --build . --parallel $(nproc)
+          sudo cmake --install .
+
+      - name: Install TypeTraits
+        run: |
+          mkdir -p ${{github.workspace}}/TypeTraits/build
+          cd ${{github.workspace}}/TypeTraits/build
+          cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
+          cmake --build . --parallel $(nproc)
+          sudo cmake --install .
+
+      - name: Install ContainerConvert
+        run: |
+          mkdir -p ${{github.workspace}}/ContainerConvert/build
+          cd ${{github.workspace}}/ContainerConvert/build
+          cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
+          cmake --build . --parallel $(nproc)
+          sudo cmake --install .
+
+      - name: Install StringUtilities
+        run: |
+          mkdir -p ${{github.workspace}}/StringUtilities/build
+          cd ${{github.workspace}}/StringUtilities/build
+          cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr -S ..
+          cmake --build . --parallel $(nproc)
+          sudo cmake --install .
+
       - name: Install Sonar build-wrapper
         run: |
           curl -sSLo build-wrapper.zip https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
