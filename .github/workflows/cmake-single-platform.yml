@@ -28,7 +28,7 @@ jobs:
       uses: actions/cache@v4
       id: cache-gtest
       with:
-        path: "$HOME/gtest"
+        path: /home/runner/gtest
         key: gtest_latest
 
     - name: Install gtest
@@ -36,9 +36,9 @@ jobs:
         CACHE_HIT: ${{steps.cache-gtest.outputs.cache-hit}}
       run: |
         if [[ "$CACHE_HIT" == 'true' ]]; then
-          cd $HOME/gtest
+          cd /home/runner/gtest
           sudo cp lib/*.a /usr/lib
-          sudo cp -R $HOME/gtest/* /usr
+          sudo cp -R /home/runner/gtest/* /usr
         else
           git clone https://github.com/google/googletest.git
           cd googletest
@@ -46,18 +46,18 @@ jobs:
           cd build
           cmake ..
           cmake --build .
-          [ ! -d $HOME/gtest ] && mkdir $HOME/gtest
-          cmake --install . --prefix $HOME/gtest
-          cd $HOME/gtest
+          [ ! -d /home/runner/gtest ] && mkdir /home/runner/gtest
+          cmake --install . --prefix /home/runner/gtest
+          cd /home/runner/gtest
           sudo cp lib/*.a /usr/lib
-          sudo cp -R $HOME/gtest/* /usr
+          sudo cp -R /home/runner/gtest/* /usr
         fi
 
     - name: Cache boost
       uses: actions/cache@v4
       id: cache-boost
       with:
-        path: "$HOME/boost"
+        path: /home/runner/boost
         key: boost_1.90.0
 
     - name: Install Boost
@@ -65,7 +65,7 @@ jobs:
         CACHE_HIT: ${{steps.cache-boost.outputs.cache-hit}}
       run: |
         if [[ "$CACHE_HIT" == 'true' ]]; then
-          sudo cp --force --recursive $HOME/boost/* /usr
+          sudo cp --force --recursive /home/runner/boost/* /usr
         else
           BOOST_MAJOR=1
           BOOST_MID=90
@@ -75,9 +75,9 @@ jobs:
           wget --quiet -O boost_${BOOST_VER}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VER_DOT}/boost_${BOOST_VER}.tar.gz/download
           tar -xf boost_${BOOST_VER}.tar.gz
           cd boost_${BOOST_VER}
-          ./bootstrap.sh --prefix=$HOME/boost
+          ./bootstrap.sh --prefix=/home/runner/boost
           ./b2 install -j $(nproc) --quiet || { echo "Boost build failed"; exit 1; }
-          sudo cp --force --recursive $HOME/boost/* /usr
+          sudo cp --force --recursive /home/runner/boost/* /usr
         fi
 
 
