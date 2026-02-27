@@ -27,19 +27,48 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential cmake ninja-build curl unzip
 
+      - name: Cache gtest
+        uses: actions/cache@v4
+        id: cache-gtest
+        with:
+          path: ~/gtest
+          key: ${{ runner.os }}-gtest-latest
+
+      - name: Install gtest
+        env:
+          CACHE_HIT: ${{steps.cache-gtest.outputs.cache-hit}}
+        run: |
+          if [[ "$CACHE_HIT" == 'true' ]]; then
+            cd ~/gtest
+            sudo cp lib/*.a /usr/lib
+            sudo cp -R ~/gtest/* /usr
+          else
+            git clone https://github.com/google/googletest.git
+            cd googletest
+            mkdir build
+            cd build
+            cmake ..
+            cmake --build .
+            mkdir -p ~/gtest
+            cmake --install . --prefix ~/gtest
+            cd ~/gtest
+            sudo cp lib/*.a /usr/lib
+            sudo cp -R ~/gtest/* /usr
+          fi
+
       - name: Cache boost
         uses: actions/cache@v4
         id: cache-boost
         with:
-          path: /home/runner/boost
-          key: boost_1.90.0
+          path: ~/boost
+          key: ${{ runner.os }}-boost-1.90.0
 
       - name: Install Boost
         env:
           CACHE_HIT: ${{steps.cache-boost.outputs.cache-hit}}
         run: |
           if [[ "$CACHE_HIT" == 'true' ]]; then
-            sudo cp --force --recursive /home/runner/boost/* /usr
+            sudo cp --force --recursive ~/boost/* /usr
           else
             BOOST_MAJOR=1
             BOOST_MID=90
@@ -49,9 +78,10 @@ jobs:
             wget --quiet -O boost_${BOOST_VER}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VER_DOT}/boost_${BOOST_VER}.tar.gz/download
             tar -xf boost_${BOOST_VER}.tar.gz
             cd boost_${BOOST_VER}
+            mkdir -p ~/boost
             ./bootstrap.sh --prefix=/home/runner/boost
             ./b2 install -j $(nproc) --quiet || { echo "Boost build failed"; exit 1; }
-            sudo cp --force --recursive /home/runner/boost/* /usr
+            sudo cp --force --recursive ~/boost/* /usr
           fi
 
       - name: Install DebugTrace
