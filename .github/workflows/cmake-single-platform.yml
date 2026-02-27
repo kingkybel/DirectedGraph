@@ -28,28 +28,17 @@ jobs:
       uses: actions/cache@v4
       id: cache-gtest
       with:
-<<<<<<< HEAD
-        path: /home/runner/gtest
-        key: gtest_latest
-=======
         path: ~/gtest
         key: ${{ runner.os }}-gtest-latest
->>>>>>> 95f51a5 (make sonarcube work)
 
     - name: Install gtest
       env:
         CACHE_HIT: ${{steps.cache-gtest.outputs.cache-hit}}
       run: |
         if [[ "$CACHE_HIT" == 'true' ]]; then
-<<<<<<< HEAD
-          cd /home/runner/gtest
-          sudo cp lib/*.a /usr/lib
-          sudo cp -R /home/runner/gtest/* /usr
-=======
           cd ~/gtest
           sudo cp lib/*.a /usr/lib
           sudo cp -R ~/gtest/* /usr
->>>>>>> 95f51a5 (make sonarcube work)
         else
           git clone https://github.com/google/googletest.git
           cd googletest
@@ -57,43 +46,26 @@ jobs:
           cd build
           cmake ..
           cmake --build .
-<<<<<<< HEAD
-          [ ! -d /home/runner/gtest ] && mkdir /home/runner/gtest
-          cmake --install . --prefix /home/runner/gtest
-          cd /home/runner/gtest
-          sudo cp lib/*.a /usr/lib
-          sudo cp -R /home/runner/gtest/* /usr
-=======
           mkdir -p ~/gtest
           cmake --install . --prefix ~/gtest
           cd ~/gtest
           sudo cp lib/*.a /usr/lib
           sudo cp -R ~/gtest/* /usr
->>>>>>> 95f51a5 (make sonarcube work)
         fi
 
     - name: Cache boost
       uses: actions/cache@v4
       id: cache-boost
       with:
-<<<<<<< HEAD
-        path: /home/runner/boost
-        key: boost_1.90.0
-=======
         path: ~/boost
         key: ${{ runner.os }}-boost-1.90.0
->>>>>>> 95f51a5 (make sonarcube work)
 
     - name: Install Boost
       env:
         CACHE_HIT: ${{steps.cache-boost.outputs.cache-hit}}
       run: |
         if [[ "$CACHE_HIT" == 'true' ]]; then
-<<<<<<< HEAD
-          sudo cp --force --recursive /home/runner/boost/* /usr
-=======
           sudo cp --force --recursive ~/boost/* /usr
->>>>>>> 95f51a5 (make sonarcube work)
         else
           BOOST_MAJOR=1
           BOOST_MID=90
@@ -103,16 +75,10 @@ jobs:
           wget --quiet -O boost_${BOOST_VER}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VER_DOT}/boost_${BOOST_VER}.tar.gz/download
           tar -xf boost_${BOOST_VER}.tar.gz
           cd boost_${BOOST_VER}
-<<<<<<< HEAD
-          ./bootstrap.sh --prefix=/home/runner/boost
-          ./b2 install -j $(nproc) --quiet || { echo "Boost build failed"; exit 1; }
-          sudo cp --force --recursive /home/runner/boost/* /usr
-=======
           mkdir -p ~/boost
           ./bootstrap.sh --prefix=/home/runner/boost
           ./b2 install -j $(nproc) --quiet || { echo "Boost build failed"; exit 1; }
           sudo cp --force --recursive ~/boost/* /usr
->>>>>>> 95f51a5 (make sonarcube work)
         fi
 
 
