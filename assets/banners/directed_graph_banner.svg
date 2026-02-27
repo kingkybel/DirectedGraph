@@ -1,0 +1,32 @@
+<svg width="1600" height="400" xmlns="http://www.w3.org/2000/svg" style="vector-effect: non-scaling-stroke;" role="img" aria-label="Bash scripts banner">
+
+ <g>
+  <title>Layer 1</title>
+  <path id="svg_1" d="m-5,2l1600,0l0,400l-1600,0l0,-400z" opacity="undefined" fill="#529D94"/>
+  <circle cx="290" cy="320" r="190" fill="#546433" fill-opacity="0.13" id="svg_2"/>
+  <text style="cursor: move; vector-effect: non-scaling-stroke;" x="90" y="210" font-family="Segoe UI, Arial, sans-serif" font-size="76" font-weight="700" fill="#ecfdf5" id="svg_11">Directed  Graph Utilities</text>
+  <text style="cursor: move; vector-effect: non-scaling-stroke;" x="93" y="269" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#d1fae5" id="svg_12">A light wrapper around boost-graph-library</text>
+  <line stroke-width="5" id="svg_17" y2="223.5" x2="1500" y1="112.5" x1="1429" fill="none"/>
+  <line id="svg_18" y2="256.5" x2="1418" y1="139.5" x1="1285" fill="none"/>
+  <line id="svg_23" y2="278.5" x2="1355" y1="253.5" x1="1329" fill-opacity="0.16" stroke="#4B252D" fill="none"/>
+  <circle stroke="#8391AE" cx="1238" cy="154" r="170" fill="#559E84" id="svg_3"/>
+  <ellipse ry="10" rx="9" id="svg_32" cy="124.5" cx="1434" stroke="#0C372C" fill="#083734"/>
+  <ellipse ry="10" rx="9" id="svg_33" cy="162.5" cx="1411" stroke="#0C372C" fill="#083734"/>
+  <ellipse ry="10" rx="9" id="svg_34" cy="198.5" cx="1477" stroke="#0C372C" fill="#083734"/>
+  <ellipse ry="10" rx="9" id="svg_36" cy="272.5" cx="1382" stroke="#0C372C" fill="#083734"/>
+  <ellipse ry="10" rx="9" id="svg_38" cy="326.5" cx="1440" stroke="#0C372C" fill="#083734"/>
+  <ellipse ry="10" rx="9" id="svg_39" cy="284.5" cx="1492" stroke="#0C372C" fill="#083734"/>
+  <line id="svg_40" y2="161.5" x2="1413" y1="126.5" x1="1430" stroke="#0C372C" fill="none"/>
+  <line id="svg_41" y2="193.5" x2="1475" y1="130.5" x1="1441" stroke="#0C372C" fill="none"/>
+  <line id="svg_42" y2="219.5" x2="1437" y1="166.5" x1="1411" fill="none"/>
+  <line id="svg_43" y2="227.5" x2="1435" y1="161.5" x1="1406" fill="none"/>
+  <ellipse ry="10" rx="9" id="svg_35" cy="225.5" cx="1435" stroke="#0C372C" fill="#083734"/>
+  <line stroke-width="5" id="svg_44" y2="223.5" x2="1500" y1="112.5" x1="1429" fill="none"/>
+  <line id="svg_45" y2="228.5" x2="1435" y1="198.5" x1="1473" stroke="#0C372C" fill="none"/>
+  <line id="svg_46" y2="225.5" x2="1437" y1="162.5" x1="1416" stroke="#0C372C" fill="none"/>
+  <line id="svg_47" y2="271.5" x2="1382" y1="167.5" x1="1408" stroke="#0C372C" fill="none"/>
+  <line id="svg_48" y2="286.5" x2="1495" y1="199.5" x1="1476" stroke="#0C372C" fill="none"/>
+  <line id="svg_49" y2="322.5" x2="1441" y1="229.5" x1="1433" stroke="#0C372C" fill="none"/>
+  <line id="svg_50" y2="327.5" x2="1437" y1="276.5" x1="1379" stroke="#0C372C" fill="none"/>
+ </g>
+</svg>
