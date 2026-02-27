@@ -1,3 +1,5 @@
+![Directed Graphs](assets/banners/directed_graph_banner.svg)
+
 # DirectedGraph
 
 A header-only template library to create different types of directed graphs.
@@ -95,3 +97,8 @@ Include the file in your code e.g:
 ```c++
 #include <dkyb/directed_graph.h>
 ```
+## Powered by
+Reduce the smells, keep on top of code-quality. Sonar Qube is run on every push to the `main` branch on GitHub.
+
+
+[![SonarQubeCloud](assets/icons/logo-sonarqube-cloud-small.png)](https://sonarcloud.io/project/overview?id=kingkybel)
