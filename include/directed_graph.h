@@ -749,9 +749,9 @@ class directed_graph_base
         auto vertices = boost::vertices(graph_);
         for (auto it = vertices.first; it != vertices.second; ++it)
         {
-            if (filter(graph_[*it])) // Apply the filter
+            if (filter(graph_[*it].data)) // Apply the filter
             {
-                vis(graph_[*it]); // Apply the visitor
+                vis(graph_[*it].data); // Apply the visitor
             }
         }
     }
@@ -769,9 +769,9 @@ class directed_graph_base
         auto edges = boost::edges(graph_);
         for (auto it = edges.first; it != edges.second; ++it)
         {
-            if (filter(graph_[*it])) // Apply the filter
+            if (filter(graph_[*it].data)) // Apply the filter
             {
-                vis(graph_[*it]); // Apply the visitor
+                vis(graph_[*it].data); // Apply the visitor
             }
         }
     }
