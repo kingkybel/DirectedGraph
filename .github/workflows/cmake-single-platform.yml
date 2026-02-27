@@ -75,7 +75,8 @@ jobs:
           wget -O boost_${BOOST_VER}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VER_DOT}/boost_${BOOST_VER}.tar.gz/download
           tar -xvf boost_${BOOST_VER}.tar.gz
           cd boost_${BOOST_VER}
-          ./bootstrap.sh --prefix=/home/runner/boost
+          ./bootstrap.sh --prefix=/home/runner/boost -j $(nproc)
+          ./b2 install -j $(nproc)
           ./b2
           ./b2 install
           sudo cp --force --recursive ~/boost/* /usr
@@ -124,8 +125,6 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Test
-      working-directory: ${{github.workspace}}/build/${{env.BUILD_TYPE}}/bin
       # Execute tests defined by the CMake configuration.
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ${{github.workspace}}/build/${{env.BUILD_TYPE}}/bin/run_tests
-
+      run: ctest --test-dir ${{github.workspace}}/build -C ${{env.BUILD_TYPE}} --output-on-failure

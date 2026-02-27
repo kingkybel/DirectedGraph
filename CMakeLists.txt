@@ -5,6 +5,7 @@ project(DirectedGraph
         HOMEPAGE_URL "https://github.com/kingkybel/DirectedGraphs")
 
 include(GNUInstallDirs)
+include(CTest)
 
 set(DKYB_CMAKE_COMMON_LOCAL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-common" CACHE PATH "Path to local dkyb cmake-common checkout")
 set(DKYB_CMAKE_COMMON_GIT_REPOSITORY "https://github.com/kingkybel/cmake-common.git" CACHE STRING "dkyb cmake-common repository")
