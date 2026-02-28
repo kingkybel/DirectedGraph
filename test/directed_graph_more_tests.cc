@@ -45,7 +45,7 @@ TEST_F(DirectedGraphMoreTest, apply_visitors_test)
     graph.addEdge(B, C, E2);
 
     std::vector<std::string> visitedVertices;
-    auto vertexVisitor = [&](Comparable const& v) {
+    auto vertexVisitor = [&visitedVertices](Comparable const& v) {
         visitedVertices.push_back(v.id_);
     };
     graph.applyVertices(vertexVisitor);
@@ -55,7 +55,7 @@ TEST_F(DirectedGraphMoreTest, apply_visitors_test)
     EXPECT_NE(std::find(visitedVertices.begin(), visitedVertices.end(), "C"), visitedVertices.end());
 
     std::vector<std::string> visitedEdges;
-    auto edgeVisitor = [&](Comparable const& e) {
+    auto edgeVisitor = [&visitedEdges](Comparable const& e) {
         visitedEdges.push_back(e.id_);
     };
     graph.applyEdges(edgeVisitor);
@@ -74,7 +74,7 @@ TEST_F(DirectedGraphMoreTest, apply_visitors_with_filter_test)
     graph.addEdge(B, C, E2);
 
     std::vector<std::string> visitedVertices;
-    auto vertexVisitor = [&](Comparable const& v) {
+    auto vertexVisitor = [&visitedVertices](Comparable const& v) {
         visitedVertices.push_back(v.id_);
     };
     auto vertexFilter = [](Comparable const& v) {
@@ -87,7 +87,7 @@ TEST_F(DirectedGraphMoreTest, apply_visitors_with_filter_test)
     EXPECT_EQ(std::find(visitedVertices.begin(), visitedVertices.end(), "B"), visitedVertices.end());
 
     std::vector<std::string> visitedEdges;
-    auto edgeVisitor = [&](Comparable const& e) {
+    auto edgeVisitor = [&visitedEdges](Comparable const& e) {
         visitedEdges.push_back(e.id_);
     };
     auto edgeFilter = [](Comparable const& e) {

@@ -27,12 +27,12 @@
 #define NS_UTIL_GRAPH_DIRECTED_GRAPH_H_INCLUDED
 
 #include <dkyb/traits.h>
-// #define DO_TRACE_
+// #define DO_TRACE_  // NOSONAR S125: Uncomment this for development output
 #include <dkyb/traceutil.h>
 #ifdef DO_TRACE_
     #include <dkyb/to_string.h>
 #endif
-// #define DO_GRAPH_DEBUG_TRACE_
+// #define DO_GRAPH_DEBUG_TRACE_ // NOSONAR S125: Uncomment this for certain tests
 #include "directed_graph_tests_debug_functions.h"
 #include "directed_graph_traits.h"
 #include "edge_properties.h"
@@ -44,10 +44,12 @@
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 #include <boost/graph/strong_components.hpp>
 #include <boost/graph/visitors.hpp>
+#include <algorithm>
 #include <deque>
 #include <functional>
 #include <gtest/gtest_prod.h>
 #include <optional>
+#include <ranges>
 #include <stdexcept>
 #include <string>
 #include <unordered_set>
@@ -71,10 +73,13 @@ namespace util::graph
  */
 struct cycle_error : public std::invalid_argument
 {
-    explicit cycle_error(std::string const &msg)
-        : std::invalid_argument(msg)
-    {
-    }
+    using std::invalid_argument::invalid_argument;
+    cycle_error() = default;
+    ~cycle_error() override = default;
+    cycle_error(const cycle_error &) = default;
+    cycle_error &operator=(const cycle_error &) = default;
+    cycle_error(cycle_error &&)                 = default;
+    cycle_error &operator=(cycle_error &&)      = default;
 };
 
 /**
@@ -83,10 +88,13 @@ struct cycle_error : public std::invalid_argument
  */
 struct parallel_edge_error : public std::invalid_argument
 {
-    explicit parallel_edge_error(std::string const &msg)
-        : std::invalid_argument(msg)
-    {
-    }
+    using std::invalid_argument::invalid_argument;
+    parallel_edge_error() = default;
+    ~parallel_edge_error() override = default;
+    parallel_edge_error(const parallel_edge_error &) = default;
+    parallel_edge_error &operator=(const parallel_edge_error &) = default;
+    parallel_edge_error(parallel_edge_error &&)                 = default;
+    parallel_edge_error &operator=(parallel_edge_error &&)      = default;
 };
 
 /**
@@ -95,10 +103,13 @@ struct parallel_edge_error : public std::invalid_argument
  */
 struct vertex_existence_error : public std::invalid_argument
 {
-    explicit vertex_existence_error(std::string const &msg)
-        : std::invalid_argument(msg)
-    {
-    }
+    using std::invalid_argument::invalid_argument;
+    vertex_existence_error() = default;
+    ~vertex_existence_error() override = default;
+    vertex_existence_error(const vertex_existence_error &) = default;
+    vertex_existence_error &operator=(const vertex_existence_error &) = default;
+    vertex_existence_error(vertex_existence_error &&)                 = default;
+    vertex_existence_error &operator=(vertex_existence_error &&)      = default;
 };
 
 /**
@@ -107,10 +118,13 @@ struct vertex_existence_error : public std::invalid_argument
  */
 struct single_parent_error : public std::invalid_argument
 {
-    explicit single_parent_error(std::string const &msg)
-        : std::invalid_argument(msg)
-    {
-    }
+    using std::invalid_argument::invalid_argument;
+    single_parent_error() = default;
+    ~single_parent_error() override = default;
+    single_parent_error(const single_parent_error &) = default;
+    single_parent_error &operator=(const single_parent_error &) = default;
+    single_parent_error(single_parent_error &&)                 = default;
+    single_parent_error &operator=(single_parent_error &&)      = default;
 };
 
 /**
@@ -119,16 +133,26 @@ struct single_parent_error : public std::invalid_argument
  */
 struct disconnection_error : public std::invalid_argument
 {
-    explicit disconnection_error(std::string const &msg)
-        : std::invalid_argument(msg)
-    {
-    }
+    using std::invalid_argument::invalid_argument;
+    disconnection_error() = default;
+    ~disconnection_error() override = default;
+    disconnection_error(const disconnection_error &) = default;
+    disconnection_error &operator=(const disconnection_error &) = default;
+    disconnection_error(disconnection_error &&)                 = default;
+    disconnection_error &operator=(disconnection_error &&)      = default;
 };
 
 template <typename VertexProperty, typename EdgeProperty>
 class VertexEdgePath
 {
   public:
+    VertexEdgePath()                                  = default;
+    ~VertexEdgePath()                                 = default;
+    VertexEdgePath(const VertexEdgePath &)            = default;
+    VertexEdgePath &operator=(const VertexEdgePath &) = default;
+    VertexEdgePath(VertexEdgePath &&) noexcept        = default;
+    VertexEdgePath &operator=(VertexEdgePath &&) noexcept = default;
+
     void add(VertexProperty const &source, VertexProperty const &target, EdgeProperty const &edge)
     {
         if (vertices_.empty())
@@ -197,7 +221,6 @@ class directed_graph_base
     friend void ::testCorrectTypes();
     //
 
-  private:
     static_assert(util::is_equality_comparable_v<VertexDataType>, "VertexDataType must be equality comparable");
     static_assert(util::is_equality_comparable_v<EdgeDataType>, "EdgeDataType must be equality comparable");
     // Detect which options are enabled
@@ -282,6 +305,13 @@ class directed_graph_base
     Graph graph_;
 
   public:
+    directed_graph_base() = default;
+    ~directed_graph_base() = default;
+    directed_graph_base(const directed_graph_base &) = default;
+    directed_graph_base &operator=(const directed_graph_base &) = default;
+    directed_graph_base(directed_graph_base &&) noexcept = default;
+    directed_graph_base &operator=(directed_graph_base &&) noexcept = default;
+
     /**
      * @brief Check if a vertex exists.
      * @param vertex vertex to look for
@@ -289,14 +319,9 @@ class directed_graph_base
      */
     bool hasVertex(VertexPropertiesType const &vertex) const noexcept
     {
-        for (auto vertexDesc: boost::make_iterator_range(boost::vertices(graph_)))
-        {
-            if (graph_[vertexDesc] == vertex)
-            {
-                return true;
-            }
-        }
-        return false;
+        auto vertices_view = std::views::all(boost::make_iterator_range(boost::vertices(graph_))) |
+                             std::views::transform([this](auto vd) { return graph_[vd]; });
+        return std::ranges::contains(vertices_view, vertex);
     }
 
     /**
@@ -344,14 +369,12 @@ class directed_graph_base
             }
             else
             {
-                auto edges                = getEdges();
-                auto [out_begin, out_end] = boost::out_edges(src, graph_);
-                for (auto it = out_begin; it != out_end; ++it)
+                auto out_edge_range = boost::make_iterator_range(boost::out_edges(src, graph_));
+                if (std::ranges::any_of(out_edge_range, [this, trg, &edge](const auto &out_edge_desc) {
+                        return boost::target(out_edge_desc, graph_) == trg && graph_[out_edge_desc] == *edge;
+                    }))
                 {
-                    if (graph_[*it] == edge)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
         }
@@ -592,22 +615,11 @@ class directed_graph_base
             return {}; // Return empty if any of the vertices is not in the graph
         }
 
-        std::deque<EdgeDataType> parallelEdges;
-        auto [edgeIter_begin, edgeIter_end] = boost::edges(graph_);
-
-        for (auto it = edgeIter_begin; it != edgeIter_end; ++it)
-        {
-            VertexDescriptor src = boost::source(*it, graph_);
-            VertexDescriptor tgt = boost::target(*it, graph_);
-
-            // Check if both sourceVertex and targetVertex match
-            if (graph_[src] == sourceVertex && graph_[tgt] == targetVertex)
-            {
-                parallelEdges.push_back(graph_[*it].data);
-            }
-        }
-
-        return parallelEdges;
+        return boost::make_iterator_range(boost::edges(graph_)) | std::views::filter([this, &sourceVertex, &targetVertex](auto ed) {
+                   return graph_[boost::source(ed, graph_)] == sourceVertex &&
+                          graph_[boost::target(ed, graph_)] == targetVertex;
+               }) | std::views::transform([this](auto ed) { return graph_[ed].data; }) |
+               std::ranges::to<std::deque>();
     }
 
     /**
@@ -794,7 +806,7 @@ class directed_graph_base
         return true;
     }
 
-    enum EdgeDirection
+    enum class EdgeDirection
     {
         All,
         Parent,
@@ -1058,7 +1070,8 @@ class directed_graph_base
         getAllPaths(VertexPropertiesType const &vertexSource, VertexPropertiesType const &vertexTarget) const
     {
         // Check if both source and target vertices exist
-        VertexDescriptor src, tgt;
+        VertexDescriptor src;
+        VertexDescriptor tgt;
         if (!getVertexDescriptor_(vertexSource, src) || !getVertexDescriptor_(vertexTarget, tgt))
         {
             return {}; // Return an empty deque if either vertex does not exist
@@ -1070,7 +1083,7 @@ class directed_graph_base
         std::unordered_set<VertexDescriptor>                     visited;
 
         // DFS helper to explore all paths
-        std::function<void(VertexDescriptor)> dfs = [&](VertexDescriptor v) {
+        std::function<void(VertexDescriptor)> dfs = [&visited, this, tgt, &current_path, &paths, &dfs](VertexDescriptor v) {
             visited.insert(v);
 
             // Explore outgoing edges
@@ -1089,7 +1102,7 @@ class directed_graph_base
                 {
                     paths.push_back(current_path);
                 }
-                else if (visited.find(target) == visited.end())
+                else if (!visited.contains(target))
                 {
                     // Continue the DFS if the target has not been visited yet
                     dfs(target);
@@ -1263,7 +1276,7 @@ class directed_graph_base
             for (auto neighbor = neighbors.first; neighbor != neighbors.second; ++neighbor)
             {
                 if ((!visited[*neighbor] && dfsCycleCheck_(*neighbor, visited, recursion_stack)) ||
-                    std::find(recursion_stack.begin(), recursion_stack.end(), *neighbor) != recursion_stack.end())
+                    std::ranges::contains(recursion_stack, *neighbor))
                 {
                     return true;
                 }
@@ -1334,8 +1347,7 @@ class directed_graph_base
             {
                 boost::clear_vertex(vertexDesc, graph_);
                 boost::remove_vertex(vertexDesc, graph_);
-                auto subGraphs = getDisconnectedSubGraphs();
-                if (!subGraphs.empty())
+                if (auto subGraphs = getDisconnectedSubGraphs(); !subGraphs.empty())
                 {
                     graph_ = subGraphs.begin()->second.graph_;
                 }
@@ -1421,8 +1433,7 @@ class directed_graph_base
             if constexpr (StayConnectedStrategy)
             {
                 boost::remove_edge(vertexDescSource, vertexDescTarget, graph_);
-                auto subGraphs = getDisconnectedSubGraphs();
-                if (!subGraphs.empty())
+                if (auto subGraphs = getDisconnectedSubGraphs(); !subGraphs.empty())
                 {
                     graph_ = subGraphs.begin()->second.graph_;
                 }

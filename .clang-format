@@ -14,7 +14,6 @@ AlignConsecutiveShortCaseStatements:
   Enabled: true
   AcrossEmptyLines: true
   AcrossComments: true
-  AlignCaseArrows: true
   AlignCaseColons: false
 AlignConsecutiveMacros:
   AcrossEmptyLines: true
