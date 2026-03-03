@@ -8,7 +8,7 @@ AlignConsecutiveDeclarations:
   AlignFunctionPointers: true
   PadOperators: true
 AllowShortFunctionsOnASingleLine: None
-BreakTemplateDeclarations: Yes
+AlwaysBreakTemplateDeclarations: MultiLine
 AllowShortEnumsOnASingleLine: false
 AlignConsecutiveShortCaseStatements:
   Enabled: true
@@ -24,14 +24,9 @@ AlignConsecutiveAssignments:
   Enabled: true
 AlignAfterOpenBracket: BlockIndent
 AlignArrayOfStructures: Left
-AlignConsecutiveTableGenBreakingDAGArgColons:
-  Enabled: true
-AlignConsecutiveTableGenDefinitionColons:
-  Enabled: true
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Never
-AllowShortCaseExpressionOnASingleLine: true
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortCompoundRequirementOnASingleLine: true
 AllowShortIfStatementsOnASingleLine: Never
@@ -100,7 +95,7 @@ PointerAlignment: Right
 QualifierAlignment: Right
 ReferenceAlignment: Right
 RemoveBracesLLVM: false
-RemoveParentheses: ReturnStatement
+RemoveParentheses: Leave
 RemoveSemicolon: true
 SeparateDefinitionBlocks: Always
 UseTab: Never
