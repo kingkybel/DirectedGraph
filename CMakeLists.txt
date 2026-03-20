@@ -32,6 +32,7 @@ dkyb_apply_common_settings(
         -Wno-error=maybe-uninitialized
 )
 
+
 set(CMAKE_FIND_LIBRARY_PREFIXES lib)
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 set(BUILD_SHARED_LIBS OFF)
