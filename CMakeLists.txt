@@ -12,18 +12,18 @@ set(DKYB_CMAKE_COMMON_GIT_REPOSITORY "https://github.com/kingkybel/cmake-common.
 set(DKYB_CMAKE_COMMON_GIT_TAG "v0.1.0" CACHE STRING "Pinned dkyb cmake-common tag")
 
 set(_dkyb_common_module "${DKYB_CMAKE_COMMON_LOCAL_PATH}/cmake/DkybBuildSettings.cmake")
-if (EXISTS "${_dkyb_common_module}")
-    include("${_dkyb_common_module}")
-else ()
-    include(FetchContent)
-    FetchContent_Declare(
-            dkyb_cmake_common
-            GIT_REPOSITORY "${DKYB_CMAKE_COMMON_GIT_REPOSITORY}"
-            GIT_TAG "${DKYB_CMAKE_COMMON_GIT_TAG}"
-    )
-    FetchContent_MakeAvailable(dkyb_cmake_common)
-    include("${dkyb_cmake_common_SOURCE_DIR}/cmake/DkybBuildSettings.cmake")
-endif ()
+if(EXISTS "${_dkyb_common_module}")
+        include("${_dkyb_common_module}")
+else()
+        include(FetchContent)
+        FetchContent_Declare(
+                dkyb_cmake_common
+                GIT_REPOSITORY "${DKYB_CMAKE_COMMON_GIT_REPOSITORY}"
+                GIT_TAG "${DKYB_CMAKE_COMMON_GIT_TAG}"
+        )
+        FetchContent_MakeAvailable(dkyb_cmake_common)
+        include("${dkyb_cmake_common_SOURCE_DIR}/cmake/DkybBuildSettings.cmake")
+endif()
 
 dkyb_apply_common_settings(
         EXTRA_CXX_FLAGS
@@ -31,6 +31,7 @@ dkyb_apply_common_settings(
         -DBOOST_BIND_GLOBAL_PLACEHOLDERS
         -Wno-error=maybe-uninitialized
 )
+dkyb_update_submodules()
 
 
 set(CMAKE_FIND_LIBRARY_PREFIXES lib)
