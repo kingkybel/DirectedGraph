@@ -611,12 +611,18 @@ template <typename VertexDataType, typename EdgeDataType, typename... Options> c
             return {}; // Return empty if any of the vertices is not in the graph
         }
 
-        return boost::make_iterator_range(boost::edges(graph_)) |
-               std::views::filter([this, &sourceVertex, &targetVertex](auto ed) {
-                   return graph_[boost::source(ed, graph_)] == sourceVertex &&
-                          graph_[boost::target(ed, graph_)] == targetVertex;
-               }) |
-               std::views::transform([this](auto ed) { return graph_[ed].data; }) | std::ranges::to<std::deque>();
+        auto edges = boost::make_iterator_range(boost::edges(graph_)) |
+                     std::views::filter([this, &sourceVertex, &targetVertex](auto ed) {
+                         return graph_[boost::source(ed, graph_)] == sourceVertex &&
+                                graph_[boost::target(ed, graph_)] == targetVertex;
+                     });
+
+        std::deque<EdgeDataType> result;
+        for (auto ed : edges)
+        {
+            result.push_back(graph_[ed].data);
+        }
+        return result;
     }
 
     /**
